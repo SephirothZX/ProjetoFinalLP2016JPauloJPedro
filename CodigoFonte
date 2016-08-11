@@ -1,1 +1,57 @@
+class Inimigo #Classe para o inimigo
+  attr_accessor :vida, :ataque, :vivo, :chance #atributos do inimigo
+
+  def initialize
+    self.vida = Random.rand(25) + 10 #vida do Golem
+    self.vivo = true
+  end
+
+  def bater(alvo)
+    if alvo.esta_vivo?
+      self.ataque = Random.rand(6) #Dano de 0 a 5 que o Golem causará ao heroi
+      self.chance = Random.rand(7) #chance de Crítico
+      if self.chance == 6 #Caso o Golem acerte com dano máximo(5) ele causará um ataque crítico, dobrando seu dano
+        self.ataque *= 2
+        puts "ATAQUE CRITICO!!!"
+      end
+      puts "O dano do Golem foi #{self.ataque}" #Exibe o dano que o Golem causou em seu alvo (Heroi)
+      alvo.vida -= self.ataque
+    else
+      puts 'Voce esta morto!' #Qnd seu HP está abaixo de 0
+    end
+  end
+
+  def esta_vivo?
+    true if self.vida > 0 #Variável booleana para saber se o golem está vivo
+  end
+end
+
+
+class Chefao #classe do chefao
+  attr_accessor :vida, :ataque, :vivo, :chance
+  
+  def initialize
+    self.vida = 50 #Vida do Dragão
+    self.vivo = true
+  end
+  
+  def bater(alvo)
+    if alvo.esta_vivo?
+      self.ataque = Random.rand(11) + 1
+      self.chance = Random.rand(3)
+      if self.chance == 2
+        self.ataque *= 2
+        puts "ATAQUE CRITICO!!!"
+      end
+      puts "O dano do Dragao foi #{self.ataque}"
+      alvo.vida -= self.ataque
+    else
+      puts 'Voce esta morto!'
+    end
+  end
+  
+  def esta_vivo?
+    true if self.vida > 0
+  end
+end
 
