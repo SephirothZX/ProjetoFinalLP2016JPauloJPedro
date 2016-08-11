@@ -55,3 +55,85 @@ class Chefao #classe do chefao
   end
 end
 
+class Heroi
+  attr_accessor :vida, :ataque, :vivo, :numero_de_abates, :chance
+
+  def initialize
+    self.vida = 100
+    self.vivo = true
+    self.numero_de_abates = 0
+  end
+
+  def bater(alvo)
+    if alvo.esta_vivo?
+      self.ataque = Random.rand(11) + 3
+      self.chance = Random.rand(5)
+      if self.chance == 4
+        self.ataque *= 2
+        puts "ATAQUE CRITICO!!!"
+      end
+      puts "Seu dano foi #{self.ataque}"
+      alvo.vida -= self.ataque
+    else
+      puts "O monstro esta morto!"
+      gets
+    end
+
+    unless alvo.esta_vivo?
+      puts "O monstro esta morto!\n\n"
+      gets
+      self.numero_de_abates += 1
+    end
+  end
+
+  def esta_vivo?
+    true if self.vida > 0
+  end
+end
+
+heroi = Heroi.new
+puts heroi.inspect
+
+while heroi.esta_vivo?
+  break if heroi.numero_de_abates > Random.rand(10)+3
+  golem = Inimigo.new 
+  puts golem.inspect
+
+  while golem.esta_vivo? && heroi.esta_vivo?
+    heroi.bater(golem)
+    puts "O HP do Golem = #{golem.vida}" if golem.esta_vivo?
+
+    if golem.esta_vivo?
+      golem.bater(heroi)
+      print "Seu HP = #{heroi.vida}"
+      puts ''
+      gets
+    end
+  end
+end
+
+boss = Chefao.new
+while heroi.esta_vivo?
+  break if boss.vida < 0
+  puts boss.inspect
+  
+  while boss.esta_vivo? && heroi.esta_vivo?
+    heroi.bater(boss)
+    puts "O HP do Dragao = #{boss.vida}" if boss.esta_vivo?
+    
+    if boss.esta_vivo?
+      boss.bater(heroi)
+      print "Seu HP = #{heroi.vida}"
+      puts ''
+      gets
+    end
+  end
+end
+if boss.vida < 0
+  puts 'Voce matou o Dragao'
+  puts 'Voce conseguiu salvar o seu Reino'
+  puts "Voce matou #{heroi.numero_de_abates} monstros"
+else
+  puts 'Voce esta MORTO, e o mundo foi dominado pelas chamas negras do Dragao.'
+  puts "Voce matou #{heroi.numero_de_abates} monstros"
+end
